@@ -5,9 +5,7 @@
 
 namespace cg {
 
-    /*
-     * Numeric<T>: a minimal, numeric-like requirement for graph value types
-     */
+    // Numeric<T>: a numeric-like requirement for graph value types
 
     template <typename T>
     concept Numeric =
@@ -19,9 +17,7 @@ namespace cg {
         { a / b } -> std::convertible_to<T>;
     };
 
-    /*
-     * UnaryOperation<Op, T>: operation functor must be callable as T f(T)
-     */
+    // UnaryOperation<Op, T>: operation functor must be callable as T f(T)
 
     template <typename Op, typename T>
     concept UnaryOperation =
@@ -30,9 +26,7 @@ namespace cg {
         { o(x) } -> std::same_as<T>;
     };
 
-    /*
-     * BinaryOperation<Op, T>: operation functor must be callable as T f(T, T)
-     */
+    // BinaryOperation<Op, T>: operation functor must be callable as T f(T, T)
 
     template <typename Op, typename T>
     concept BinaryOperation =
@@ -41,4 +35,4 @@ namespace cg {
         { o(x, y) } -> std::same_as<T>;
     };
 
-}
+} // namespace cg

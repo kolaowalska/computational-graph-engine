@@ -46,4 +46,5 @@ namespace cg {
     private:
         std::vector<std::unique_ptr<Node<T>>> nodes_;
     };
-}
+
+} // namespace cg
