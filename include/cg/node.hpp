@@ -21,7 +21,8 @@ namespace cg {
         // returns a list of dependency node IDs
         virtual std::span<const NodeID> inputs() const noexcept = 0;
 
-        // TODO: evaluate_from_cache
+        // uses precomputed values[child.index()] to avoid recursion when computing its own value
+        virtual T evaluate_from_cache(std::span<const T> values) const = 0;
     };
 
     template<Numeric T>
@@ -31,6 +32,7 @@ namespace cg {
 
         std::string_view kind() const noexcept override { return "const"; }
         std::span<const NodeID> inputs() const noexcept override { return {}; }
+        T evaluate_from_cache(std::span<const T> values) const override { return value_; }
 
         T value() const noexcept { return value_; }
 
@@ -46,6 +48,10 @@ namespace cg {
         std::string_view kind() const noexcept override { return "input"; }
         std::span<const NodeID> inputs() const noexcept override { return {}; }
 
+        T evaluate_from_cache(std::span<const T> values) const override {
+            throw std::logic_error("not implemented");
+        }
+
         const std::string& name() const noexcept {return name_; }
 
     private:
@@ -58,8 +64,13 @@ namespace cg {
         UnaryNode(NodeID in, Op op = {}) : in_(in), op_(std::move(op)) {}
 
         std::string_view kind() const noexcept override { return "unary"; }
+
         std::span<const NodeID> inputs() const noexcept override {
             return std::span<const NodeID>(&in_, 1);
+        }
+
+        T evaluate_from_cache(std::span<const T> values) const override {
+            return op_(values[in_.index()]);
         }
 
         NodeID input() const noexcept { return in_; }
@@ -76,8 +87,15 @@ namespace cg {
         BinaryNode(NodeID x, NodeID y, Op op = {}) : ins_{x, y}, op_(std::move(op)) {}
 
         std::string_view kind() const noexcept override { return "binary"; }
+
         std::span<const NodeID> inputs() const noexcept override {
             return std::span<const NodeID>(ins_.data(), ins_.size());
+        }
+
+        T evaluate_from_cache(std::span<const T> values) const override {
+            const auto a = values[ins_[0].index()];
+            const auto b = values[ins_[1].index()];
+            return op(a, b);
         }
 
         NodeID left() const noexcept { return ins_[0]; }
@@ -89,4 +107,4 @@ namespace cg {
         Op op_;
     };
 
-}
+} // namespace cg
