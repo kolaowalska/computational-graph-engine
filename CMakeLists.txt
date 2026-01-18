@@ -17,6 +17,9 @@ target_sources(cg INTERFACE
         include/cg/eval/policies.hpp
         include/cg/eval/evaluator.hpp
         include/cg/opt/constant_folding.hpp
+        tests/test_basic.cpp)
+
+target_include_directories(cg INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 )
 
 add_executable(computational-graph-engine src/main.cpp)
