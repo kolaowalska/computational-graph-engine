@@ -2,11 +2,9 @@
 #include <cstddef>
 #include <compare>
 
-/*
- * a strongly-typed handle for nodes to avoid passing raw indices and pointers around
- */
-
 namespace cg {
+
+    // a strongly-typed handle for nodes to avoid passing raw indices and pointers around
     struct NodeID {
         std::size_t idx{0};
 

@@ -8,6 +8,7 @@
 
 namespace cg {
 
+    // a runtime-polymorphic base for all node types
     template<Numeric T>
     class Node {
     public:
