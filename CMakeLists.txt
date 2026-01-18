@@ -21,7 +21,6 @@ target_sources(cg INTERFACE
 
 target_include_directories(cg INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-
 add_executable(computational-graph-engine src/main.cpp)
 
 target_link_libraries(computational-graph-engine PRIVATE cg)
