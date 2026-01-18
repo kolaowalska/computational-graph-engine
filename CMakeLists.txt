@@ -20,7 +20,7 @@ target_sources(cg INTERFACE
         tests/test_basic.cpp)
 
 target_include_directories(cg INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-)
+
 
 add_executable(computational-graph-engine src/main.cpp)
 

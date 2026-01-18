@@ -1,1 +1,0 @@
-/usr/bin/c++ -g -Wl,--dependency-file=CMakeFiles/computational_graph_framework.dir/link.d CMakeFiles/computational_graph_framework.dir/src/main.cpp.o -o computational_graph_framework
