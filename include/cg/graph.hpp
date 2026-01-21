@@ -26,8 +26,21 @@ namespace cg {
         }
 
         NodeID add(std::unique_ptr<Node<T>> node) {
+            auto h = node->hash();
+
+            auto range = cache_.equal_range(h);
+            for (auto it = range.first; it != range.second; ++it) {
+                NodeID existing = it->second;
+                if (nodes_[existing.index()]->is_equivalent(*node)) {
+                    return existing;
+                }
+            }
+
             nodes_.push_back(std::move(node));
-            return NodeID{nodes_.size() - 1};
+            NodeID new_id{nodes_.size() - 1};
+            // TODO: cache_.insert({h, new_id});
+            cache_.insert(std::make_pair(h, new_id));
+            return new_id;
         }
 
         void replace(NodeID id, std::unique_ptr<Node<T>> node) {
@@ -45,6 +58,7 @@ namespace cg {
 
     private:
         std::vector<std::unique_ptr<Node<T>>> nodes_;
+        std::unordered_multimap<std::size_t, NodeID> cache_;
     };
 
 } // namespace cg

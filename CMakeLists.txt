@@ -1,8 +1,10 @@
-cmake_minimum_required(VERSION 4.1)
-project(computational-graph-engine LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.20)
+project(computational_graph_engine LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_executable(computational_graph_engine src/main.cpp)
 
 add_library(cg INTERFACE)
 
@@ -21,7 +23,4 @@ target_sources(cg INTERFACE
         tests/test_basic.cpp)
 
 target_include_directories(cg INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-add_executable(computational-graph-engine src/main.cpp)
-
-target_link_libraries(computational-graph-engine PRIVATE cg)
+target_link_libraries(computational_graph_engine PRIVATE cg)
