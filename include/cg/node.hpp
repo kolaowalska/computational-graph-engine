@@ -7,6 +7,8 @@
 #include <vector>
 #include <functional>
 #include <typeinfo>
+#include <sstream>
+#include <iomanip>
 
 namespace cg {
 
@@ -32,6 +34,8 @@ namespace cg {
 
         // uses precomputed values[child.index()] to avoid recursion when computing its own value
         virtual T evaluate_from_cache(std::span<const T> values) const = 0;
+
+        virtual std::string label() const noexcept = 0;
     };
 
     template<Numeric T>
@@ -56,6 +60,12 @@ namespace cg {
         }
 
         T value() const noexcept { return value_; }
+
+        std::string label() const noexcept override {
+            std::ostringstream oss;
+            oss << value_;
+            return oss.str();
+        }
 
     private:
         T value_;
@@ -85,6 +95,10 @@ namespace cg {
         }
 
         const std::string& name() const noexcept {return name_; }
+
+        std::string label() const noexcept override {
+            return name_;
+        }
 
     private:
         std::string name_;
@@ -122,6 +136,10 @@ namespace cg {
 
         NodeID input() const noexcept { return in_; }
         const Op& op() const noexcept { return op_; }
+
+        std::string label() const noexcept override {
+            return std::string(Op::symbol);
+        }
 
     private:
         NodeID in_;
@@ -164,6 +182,10 @@ namespace cg {
         NodeID left() const noexcept { return ins_[0]; }
         NodeID right() const noexcept { return ins_[1]; }
         const Op& op() const noexcept { return op_; }
+
+        std::string label() const noexcept override {
+            return std::string(Op::symbol);
+        }
 
     private:
         std::array<NodeID, 2> ins_{};
