@@ -1,7 +1,12 @@
 #include <iostream>
+#include <fstream>
+#include <filesystem>
 #include "cg/expression.hpp"
 #include "cg/eval/evaluator.hpp"
 #include "cg/eval/policies.hpp"
+#include "cg/viz/visualizer.hpp"
+
+
 
 int main() {
     using T = double;
@@ -20,7 +25,7 @@ int main() {
     std::cout << "x = "; std::cin >> ctx["x"];
     std::cout << "y = "; std::cin >> ctx["y"];
 
-    //cg::Evaluator<T, cg::eval::NaiveEvaluator> eval;
+
     cg::Evaluator<T, cg::eval::NaiveEvaluator> naive;
     auto naive_result = naive.evaluate(G, expr.root(), ctx);
 
@@ -30,4 +35,7 @@ int main() {
     std::cout << "naive result = " << naive_result << "\n";
     std::cout << "lazy result = " << lazy_result << "\n";
     std::cout << "nodes = " << G.size() << "\n";
+
+    cg::viz::visualize(G);
+
 }
