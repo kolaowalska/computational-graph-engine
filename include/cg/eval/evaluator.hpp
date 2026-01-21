@@ -3,7 +3,8 @@
 
 namespace cg {
 
-    template<Numeric T, typename Policy>
+    // compile-time strategy to avoid vtable dispatching
+    template<Numeric T, eval::EvaluationPolicy<T> Policy>
     class Evaluator {
     public:
         explicit Evaluator(Policy policy = {}) : policy_(std::move(policy)) {}

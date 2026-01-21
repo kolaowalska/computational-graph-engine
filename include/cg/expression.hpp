@@ -3,6 +3,7 @@
 #include "ops.hpp"
 
 #include <cassert>
+#include <numbers>
 
 namespace cg {
 
@@ -14,7 +15,6 @@ namespace cg {
         Graph<T>& graph() const { return *G_; }
         NodeID root() const noexcept { return root_; }
 
-
     private:
         Graph<T>* G_;
         NodeID root_;
@@ -23,6 +23,16 @@ namespace cg {
     template<Numeric T>
     Expression<T> constant(Graph<T>& G, T value) {
         return Expression<T>(&G, G.constant(value));
+    }
+
+    template<Numeric T>
+    Expression<T> pi(Graph<T>& G) {
+        return constant(G, std::numbers::pi_v<T>);
+    }
+
+    template<Numeric T>
+    Expression<T> e(Graph<T>& G) {
+        return constant(G, std::numbers::e_v<T>);
     }
 
     template<Numeric T>
@@ -46,6 +56,8 @@ namespace cg {
         return Expression<T>(&G, id);
     }
 
+    // --------- EXPRESSION <-> EXPRESSION OPERATORS ---------
+
     template<Numeric T>
     Expression<T> operator+(Expression<T> a, Expression<T> b) {
         return binary<T>(a, b, ops::Add{});
@@ -67,6 +79,13 @@ namespace cg {
     }
 
     template<Numeric T>
+    Expression<T> pow(Expression<T> base, Expression<T> exponent) {
+        return binary<T>(base, exponent, ops::Pow{});
+    }
+
+    // --------- EXPRESSION OPERATORS ---------
+
+    template<Numeric T>
     Expression<T> operator-(Expression<T> a) {
         return unary<T>(a, ops::Neg{});
     }
@@ -80,6 +99,23 @@ namespace cg {
     Expression<T> cos(Expression<T> a) {
         return unary<T>(a, ops::Cos{});
     }
+
+    template<Numeric T>
+    Expression<T> exp(Expression<T> a) {
+        return unary<T>(a, ops::Exp{});
+    }
+
+    template<Numeric T>
+    Expression<T> log(Expression<T> a) {
+        return unary<T>(a, ops::Log{});
+    }
+
+    template<Numeric T>
+    Expression<T> sqrt(Expression<T> a) {
+        return unary<T>(a, ops::Sqrt{});
+    }
+
+    // --------- EXPRESSION <-> SCALAR OPERATORS ---------
 
     template<Numeric T>
     Expression<T> operator+(Expression<T> a, T scalar) {
@@ -119,6 +155,16 @@ namespace cg {
     template<Numeric T>
     Expression<T> operator/(T scalar, Expression<T> a) {
         return constant(a.graph(), scalar) / a;
+    }
+
+    template<Numeric T>
+    Expression<T> pow(Expression<T> base, T exponent) {
+        return binary<T>(base, constant(base.graph(), exponent), ops::Pow{});
+    }
+
+    template<Numeric T>
+    Expression<T> pow(T base, Expression<T> exponent) {
+        return binary<T>(constant(exponent.graph(), base), exponent, ops::Pow{});
     }
 
 } // namespace cg

@@ -45,6 +45,21 @@ namespace cg::ops {
         T operator()(T x) const { using std::exp; return exp(x); }
     };
 
+    struct Log {
+        template<cg::Numeric T>
+        T operator()(T x) const { using std::log; return log(x); }
+    };
+
+    struct Pow {
+        template<cg::Numeric T>
+        T operator()(T base, T exponent) const { using std::pow; return pow(base, exponent); }
+    };
+
+    struct Sqrt {
+        template<cg::Numeric T>
+        T operator()(T x) const { using std::sqrt; return sqrt(x); }
+    };
+
 
 
 }
