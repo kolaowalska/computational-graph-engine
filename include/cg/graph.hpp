@@ -55,6 +55,47 @@ namespace cg {
             return add(std::make_unique<InputNode<T>>(std::move(name)));
         }
 
+        // kahn
+        std::vector<NodeID> topological_sort() const {
+            std::vector<size_t> indegree(nodes_.size(), 0);
+            std::vector<std::vector<size_t>> adj(nodes_.size());
+
+            for (size_t i = 0; i < nodes_.size(); ++i) {
+                for (const auto& dep : nodes_[i]->inputs()) {
+                    adj[dep.index()].push_back(i);
+                    ++indegree[i];
+                }
+            }
+
+            std::queue<size_t> q;
+            for (size_t i = 0; i < nodes_.size(); ++i) {
+                if (indegree[i] == 0) {
+                    q.push(i);
+                }
+            }
+
+            std::vector<NodeID> sorted;
+            sorted.reserve(nodes_.size());
+
+            while (!q.empty()) {
+                size_t u = q.front();
+                q.pop();
+                sorted.push_back(NodeID{u});
+
+                for (size_t v : adj[u]) {
+                    --indegree[v];
+                    if (indegree[v] == 0) {
+                        q.push(v);
+                    }
+                }
+            }
+
+            if (sorted.size() != nodes_.size()) {
+                throw std::runtime_error("graph contains a cycle >:(");
+            }
+
+            return sorted;
+        }
 
     private:
         std::vector<std::unique_ptr<Node<T>>> nodes_;
