@@ -2,6 +2,8 @@
 #include "graph.hpp"
 #include "ops.hpp"
 
+#include <cassert>
+
 namespace cg {
 
     template<Numeric T>
@@ -37,6 +39,8 @@ namespace cg {
 
     template<Numeric T, BinaryOperation<T> O>
     Expression<T> binary(Expression<T> a, Expression<T> b, O operation = {}) {
+        assert(&a.graph() == &b.graph() && "cannot combine expressions from different graphs :(");
+
         auto& G = a.graph();
         auto id = G.add(std::make_unique<BinaryNode<T, O>>(a.root(), b.root(), std::move(operation)));
         return Expression<T>(&G, id);
@@ -75,6 +79,46 @@ namespace cg {
     template<Numeric T>
     Expression<T> cos(Expression<T> a) {
         return unary<T>(a, ops::Cos{});
+    }
+
+    template<Numeric T>
+    Expression<T> operator+(Expression<T> a, T scalar) {
+        return a + constant(a.graph(), scalar);
+    }
+
+    template<Numeric T>
+    Expression<T> operator+(T scalar, Expression<T> a) {
+        return constant(a.graph(), scalar) + a;
+    }
+
+    template<Numeric T>
+    Expression<T> operator-(Expression<T> a, T scalar) {
+        return a - constant(a.graph(), scalar);
+    }
+
+    template<Numeric T>
+    Expression<T> operator-(T scalar, Expression<T> a) {
+        return constant(a.graph(), scalar) - a;
+    }
+
+    template<Numeric T>
+    Expression<T> operator*(Expression<T> a, T scalar) {
+        return a * constant(a.graph(), scalar);
+    }
+
+    template<Numeric T>
+    Expression<T> operator*(T scalar, Expression<T> a) {
+        return constant(a.graph(), scalar) * a;
+    }
+
+    template<Numeric T>
+    Expression<T> operator/(Expression<T> a, T scalar) {
+        return a / constant(a.graph(), scalar);
+    }
+
+    template<Numeric T>
+    Expression<T> operator/(T scalar, Expression<T> a) {
+        return constant(a.graph(), scalar) / a;
     }
 
 } // namespace cg

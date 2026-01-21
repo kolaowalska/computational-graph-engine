@@ -13,8 +13,7 @@ int main() {
     auto y = cg::input(G, "y");
 
     // TODO: fix this
-    // auto expr = cg::sin(x) * (y + cg::constant(G, 2.0))
-    //           + cg::constant(G, 3.0) * x * x;
+    auto expr = cg::sin(x) * (y + 2.0) + 3.0 * x * x;
 
     cg::Context<T> ctx;
 
@@ -22,8 +21,8 @@ int main() {
     std::cout << "y = "; std::cin >> ctx["y"];
 
     cg::Evaluator<T, cg::eval::NaiveEvaluator> eval;
-    // auto result = eval.evaluate(G, expr.root(), ctx);
+    auto result = eval.evaluate(G, expr.root(), ctx);
 
-    // std::cout << "result = " << result << "\n";
+    std::cout << "result = " << result << "\n";
     std::cout << "nodes  = " << G.size() << "\n";
 }
