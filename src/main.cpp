@@ -12,8 +12,8 @@ int main() {
     auto x = cg::input(G, "x");
     auto y = cg::input(G, "y");
 
-    // TODO: fix this
-    auto expr = cg::sin(x) * (y + 2.0) + 3.0 * x * x;
+    auto expression = cg::sin(x) * (y + 2.0) + 3.0 * x * x;
+    auto expr = cg::pi(G) + 1.0;
 
     cg::Context<T> ctx;
 

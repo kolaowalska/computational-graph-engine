@@ -3,6 +3,7 @@
 
 namespace cg {
 
+    // compile-time strategy to avoid vtable dispatching
     template<Numeric T, typename Policy>
     class Evaluator {
     public:

@@ -24,3 +24,10 @@ target_sources(cg INTERFACE
 
 target_include_directories(cg INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(computational_graph_engine PRIVATE cg)
+
+
+enable_testing()
+add_executable(cg_tests tests/test_basic.cpp)
+target_link_libraries(cg_tests PRIVATE cg)
+
+add_test(NAME basic_graph_test COMMAND cg_tests)

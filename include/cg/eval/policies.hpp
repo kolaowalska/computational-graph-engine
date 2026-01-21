@@ -38,7 +38,4 @@ namespace cg::eval {
             return values[root.index()];
         }
     };
-
-    struct MemoizedEvaluator : NaiveEvaluator {};
-
 }
