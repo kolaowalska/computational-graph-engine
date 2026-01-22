@@ -16,6 +16,7 @@ target_sources(cg INTERFACE
         include/cg/graph.hpp
         include/cg/expression.hpp
         include/cg/ops.hpp
+        include/cg/dual.hpp
         include/cg/eval/policies.hpp
         include/cg/eval/evaluator.hpp
         include/cg/opt/constant_folding.hpp
