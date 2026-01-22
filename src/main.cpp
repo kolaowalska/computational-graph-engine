@@ -52,18 +52,24 @@ void ad() {
     cg::Evaluator<T, cg::eval::NaiveEvaluator> naive;
     cg::Context<T> ctx;
 
-    double input_x, input_y;
+    double input_x;
+    double input_y;
 
     std::cout << "x = "; std::cin >> input_x;
     std::cout << "y = "; std::cin >> input_y;
 
-    ctx["x"] = {input_x, 1.0};
-    ctx["y"] = {input_y, 1.0};
-
     try {
-        T result = naive.evaluate(H, expr.root(), ctx);
-        std::cout << "f(" << input_x << ", " << input_y << ") = " << result.value << "\n";
-        std::cout << "f'(" << input_x << ", " << input_y << ") = " << result.d << "\n";
+        ctx["x"] = T(input_x, 1.0);
+        ctx["y"] = T(input_y, 0.0);
+        T x_result = naive.evaluate(H, expr.root(), ctx);
+
+        ctx["x"] = T(input_x, 0.0);
+        ctx["y"] = T(input_y, 1.0);
+        T y_result = naive.evaluate(H, expr.root(), ctx);
+
+        std::cout << "f(x, y) = f(" << input_x << ", " << input_y << ") = " << x_result.value << "\n";
+        std::cout << "df/dx = " << x_result.d << "\n";
+        std::cout << "df/dy = " << y_result.d << "\n";
         cg::viz::visualize(H);
     } catch (const std::exception& e) {
         std::cerr << "error :( " << e.what() << "\n";
@@ -71,7 +77,6 @@ void ad() {
 
     std::cin.clear();
     std::string ignore; std::getline(std::cin, ignore);
-
 }
 
 

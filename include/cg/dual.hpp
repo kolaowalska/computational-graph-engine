@@ -13,7 +13,7 @@ namespace cg {
 
 
         Dual operator+(const Dual& x) const {
-            return {value + x.value, d - x.d};
+            return {value + x.value, d + x.d};
         }
 
         Dual operator-(const Dual& x) const {
