@@ -18,7 +18,7 @@ namespace cg::viz {
         fs::path dot_path = out_dir / "graph.dot";
         std::ofstream dot_file(dot_path);
 
-        cg::viz::export_to_dot(G, dot_file);
+        viz::export_to_dot(G, dot_file);
         dot_file.close();
 
         std::cout << "\nrendering png...\n";

@@ -15,20 +15,20 @@ namespace cg {
         { a / b } -> std::convertible_to<T>;
     };
 
-    // UnaryOperation<Op, T>: operation functor must be callable as T f(T)
+    // UnaryOperation<O, T>: operation functor must be callable as T f(T)
 
-    template <typename Op, typename T>
+    template <typename O, typename T>
     concept UnaryOperation =
-        requires(Op o, T x)
+        requires(O o, T x)
     {
         { o(x) } -> std::same_as<T>;
     };
 
-    // BinaryOperation<Op, T>: operation functor must be callable as T f(T, T)
+    // BinaryOperation<O, T>: operation functor must be callable as T f(T, T)
 
-    template <typename Op, typename T>
+    template <typename O, typename T>
     concept BinaryOperation =
-        requires (Op o, T x, T y)
+        requires (O o, T x, T y)
     {
         { o(x, y) } -> std::same_as<T>;
     };

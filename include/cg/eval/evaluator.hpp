@@ -4,17 +4,17 @@
 namespace cg {
 
     // compile-time strategy to avoid vtable dispatching
-    template<Numeric T, eval::EvaluationPolicy<T> Policy>
+    template<Numeric T, eval::EvaluationPolicy<T> P>
     class Evaluator {
     public:
-        explicit Evaluator(Policy policy = {}) : policy_(std::move(policy)) {}
+        explicit Evaluator(P policy = {}) : policy_(std::move(policy)) {}
 
         T evaluate(const Graph<T>& G, NodeID root, const Context<T>& ctx) const {
             return policy_(G, root, ctx);
         }
 
     private:
-        Policy policy_;
+        P policy_;
 
     };
 }

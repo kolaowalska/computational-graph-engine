@@ -104,26 +104,26 @@ namespace cg {
         std::string name_;
     };
 
-    template<Numeric T, UnaryOperation<T> Op>
+    template<Numeric T, UnaryOperation<T> O>
     class UnaryNode final : public Node<T> {
     public:
-        UnaryNode(NodeID in, Op op = {}) : in_(in), op_(std::move(op)) {}
+        UnaryNode(NodeID in, O o = {}) : in_(in), o_(std::move(o)) {}
 
         std::string_view kind() const noexcept override { return "unary"; }
 
         std::span<const NodeID> inputs() const noexcept override {
-            return std::span<const NodeID>(&in_, 1);
+            return std::span(&in_, 1);
         }
 
         T evaluate_from_cache(std::span<const T> values) const override {
-            return op_(values[in_.index()]);
+            return o_(values[in_.index()]);
         }
 
         // same input + same operation type = same node
         std::size_t hash() const noexcept override {
             std::size_t h = 0;
             hash_combine(h, in_.index());
-            hash_combine(h, typeid(Op).hash_code());
+            hash_combine(h, typeid(O).hash_code());
             return h;
         }
 
@@ -135,33 +135,33 @@ namespace cg {
         }
 
         NodeID input() const noexcept { return in_; }
-        const Op& op() const noexcept { return op_; }
+        const O& o() const noexcept { return o_; }
 
         std::string label() const noexcept override {
-            return std::string(Op::symbol);
+            return std::string(O::symbol);
         }
 
     private:
         NodeID in_;
-        Op op_;
+        O o_;
     };
 
-    template<Numeric T, BinaryOperation<T> Op>
+    template<Numeric T, BinaryOperation<T> O>
     class BinaryNode final : public Node<T> {
     public:
-        BinaryNode(NodeID x, NodeID y, Op op = {}) : ins_{x, y}, op_(std::move(op)) {}
+        BinaryNode(NodeID x, NodeID y, O o = {}) : ins_{x, y}, o_(std::move(o)) {}
 
         std::string_view kind() const noexcept override { return "binary"; }
 
         std::span<const NodeID> inputs() const noexcept override {
-            return std::span<const NodeID>(ins_.data(), ins_.size());
+            return std::span(ins_.data(), ins_.size());
         }
 
         T evaluate_from_cache(std::span<const T> values) const override {
             // const auto a = values[ins_[0].index()];
             // const auto b = values[ins_[1].index()];
-            // return op(a, b);
-            return op_(values[ins_[0].index()], values[ins_[1].index()]);
+            // return o(a, b);
+            return o_(values[ins_[0].index()], values[ins_[1].index()]);
         }
 
         // same input + same operation type = same node
@@ -169,7 +169,7 @@ namespace cg {
             std::size_t h = 0;
             hash_combine(h, ins_[0].index());
             hash_combine(h, ins_[1].index());
-            hash_combine(h, typeid(Op).hash_code());
+            hash_combine(h, typeid(O).hash_code());
             return h;
         }
         bool is_equivalent(const Node<T>& other) const noexcept override {
@@ -181,15 +181,15 @@ namespace cg {
 
         NodeID left() const noexcept { return ins_[0]; }
         NodeID right() const noexcept { return ins_[1]; }
-        const Op& op() const noexcept { return op_; }
+        const O& o() const noexcept { return o_; }
 
         std::string label() const noexcept override {
-            return std::string(Op::symbol);
+            return std::string(O::symbol);
         }
 
     private:
         std::array<NodeID, 2> ins_{};
-        Op op_;
+        O o_;
     };
 
 } // namespace cg
