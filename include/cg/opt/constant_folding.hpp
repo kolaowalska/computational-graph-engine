@@ -4,10 +4,10 @@
 
 namespace cg::opt {
 
-    template<cg::Numeric T>
+    template<Numeric T>
     class ConstantFolding {
     public:
-        void run(cg::Graph<T>& G, cg::NodeID root) {
+        void run(Graph<T>& G, cg::NodeID root) {
             auto order = G.topological_sort();
 
             std::vector<bool> is_const(G.size(), false);

@@ -22,8 +22,8 @@ namespace cg::eval {
     };
 
     struct NaiveEvaluator {
-        template<cg::Numeric T>
-        T operator()(const cg::Graph<T>& G, cg::NodeID root, const cg::Context<T>& ctx) const {
+        template<Numeric T>
+        T operator()(const Graph<T>& G, NodeID root, const Context<T>& ctx) const {
             std::vector<T> values(G.size()); // storage for computed values
             auto order = G.topological_sort(); // get safe execution order
 
@@ -51,8 +51,8 @@ namespace cg::eval {
 
 
     struct LazyEvaluator {
-        template <cg::Numeric T>
-        T operator()(const cg::Graph<T>& G, cg::NodeID root, const cg::Context<T>& ctx) const {
+        template <Numeric T>
+        T operator()(const Graph<T>& G, NodeID root, const Context<T>& ctx) const {
             std::vector<T> values(G.size()); // storage for computed values
             std::vector<bool> computed(G.size(), false);
 
@@ -60,10 +60,10 @@ namespace cg::eval {
         }
 
     private:
-        template <cg::Numeric T>
-        T recursive_evaluate(cg::NodeID id, const cg::Graph<T>& G,
+        template <Numeric T>
+        T recursive_evaluate(NodeID id, const Graph<T>& G,
                          std::vector<T>& values, std::vector<bool>& computed,
-                         const cg::Context<T>& ctx) const {
+                         const Context<T>& ctx) const {
 
             size_t idx = id.index();
 
@@ -76,7 +76,7 @@ namespace cg::eval {
             }
 
             if (node.kind() == "input") {
-                const auto& input = static_cast<const cg::InputNode<T>&>(node);
+                const auto& input = static_cast<const InputNode<T>&>(node);
                 auto it = ctx.find(input.name());
                 if (it == ctx.end()) {
                     throw std::runtime_error("missing value for input variable: " + input.name());
