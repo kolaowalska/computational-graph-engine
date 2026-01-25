@@ -3,6 +3,7 @@
 #include <filesystem>
 #include "cg/expression.hpp"
 #include "cg/dual.hpp"
+#include "cg/opt/constant_folding.hpp"
 #include "cg/eval/evaluator.hpp"
 #include "cg/eval/policies.hpp"
 #include "cg/viz/visualizer.hpp"
@@ -15,9 +16,12 @@ void arithmetic() {
     auto x = cg::input(G, "x");
     auto y = cg::input(G, "y");
 
-    std::cout << "evaluating expression f(x, y) = sin(x) * (y + 2) + 3 * x^2\n";
+    std::cout << "evaluating expression f(x, y) = sin(x) * (y + 2) + 3 * 5 + x^2\n";
 
-    auto expr = cg::sin(x) * (y + 2.0) + 3.0 * x * x;
+    auto expr = cg::sin(x) * (y + 2.0) +
+                                cg::constant(G, 3.0) *
+                                cg::constant(G, 5.0) +
+                                x * x;
 
     cg::Evaluator<T, cg::eval::NaiveEvaluator> naive;
     cg::Context<T> ctx;
@@ -46,6 +50,7 @@ void ad() {
     auto y = cg::input(H, "y");
 
     std::cout << "evaluating derivative of expression f(x, y) = sin(x) + y^2\n";
+
 
     auto expr = cg::sin(x) + y * y;
 
@@ -83,7 +88,7 @@ void ad() {
 int main() {
     int choice = 0;
     while (true) {
-        std::cout << "\nchoose an option:\n";
+        std::cout << "\nchoose a demo option:\n";
         std::cout << "1. standard math evaluation\n";
         std::cout << "2. automatic differentiation\n";
         std::cout << "3. exit\n";

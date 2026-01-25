@@ -11,7 +11,6 @@ namespace cg {
 
         Dual(T v = 0, T d = 0) : value(v), d(d) {}
 
-
         Dual operator+(const Dual& x) const {
             return {value + x.value, d + x.d};
         }
