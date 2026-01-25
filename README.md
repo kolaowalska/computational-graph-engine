@@ -1,7 +1,7 @@
 # computational-graph-engine
 
 ## overview & purpose
-this project is a lightweight C++ 20 framework for building and evaluating mathematical expressions using directed acyclic graphs. it leverages static polymorphism and concepts to accommodate a type-safe environment with support for standard arithmetic, forward automatic differentiation, and structural graph optimizations.
+this project is a lightweight C++ 20 framework for building and evaluating mathematical expressions using directed acyclic graphs. it wields static polymorphism and concepts to accommodate a type-safe environment with support for standard arithmetic, forward automatic differentiation, and structural graph optimizations.
 
 ### general functionalities
 
