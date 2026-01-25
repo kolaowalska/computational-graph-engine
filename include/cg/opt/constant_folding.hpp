@@ -7,7 +7,7 @@ namespace cg::opt {
     template<Numeric T>
     class ConstantFolding {
     public:
-        void run(Graph<T>& G, cg::NodeID root) {
+        void run(Graph<T>& G, NodeID root) {
             auto order = G.topological_sort();
 
             std::vector<bool> is_const(G.size(), false);

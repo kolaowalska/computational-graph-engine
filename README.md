@@ -112,6 +112,6 @@ this project is a lightweight C++ 20 framework for building and evaluating mathe
 mkdir build && cd build
 cmake ..
 make 
-./main
+./cg_main
 ```
 
